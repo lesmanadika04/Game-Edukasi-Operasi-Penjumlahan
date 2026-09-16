@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelinci Melompat - Penjumlahan Menghitung Maju (Kelas 1 SD)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #e8f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            border: 4px solid #4caf50;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 850px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        h1 {
+            color: #2e7d32;
+            margin-top: 0;
+            font-size: 26px;
+        }
+        .instruction {
+            background-color: #f1f8e9;
+            color: #33691e;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border: 2px dashed #81c784;
+        }
+        
+        /* Area Garis Bilangan Blok */
+        .number-line-container {
+            position: relative;
+            height: 180px;
+            margin: 30px 0;
+            background-color: #e0f2f1;
+            border-radius: 15px;
+            padding: 10px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            overflow: hidden;
+            border: 2px solid #80cbc4;
+        }
+        .blocks-group {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 1;
+        }
+        .block-item {
+            width: 8%;
+            height: 60px;
+            background: linear-gradient(135deg, #ffb74d, #f57c00);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            border: 2px solid #e65100;
+            box-shadow: 0 4px 0 #b26a00;
+            transition: background-color 0.3s;
+        }
+        .block-item.start {
+            background: linear-gradient(135deg, #64b5f6, #1976d2);
+            border-color: #0d47a1;
+            box-shadow: 0 4px 0 #1565c0;
+        }
+        .block-item.target {
+            background: linear-gradient(135deg, #81c784, #388e3c);
+            border-color: #1b5e20;
+            box-shadow: 0 4px 0 #2e7d32;
+        }
+
+        /* Kelinci */
+        #rabbit {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            font-size: 40px;
+            line-height: 50px;
+            bottom: 70px;
+            left: 1%;
+            transition: left 0.4s ease-in-out, bottom 0.2s ease-in-out;
+            z-index: 10;
+        }
+        .jumping {
+            bottom: 120px !important;
+        }
+
+        /* Area Form Penjumlahan */
+        .math-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .input-num {
+            width: 70px;
+            height: 60px;
+            font-size: 28px;
+            text-align: center;
+            border: 3px solid #4caf50;
+            border-radius: 12px;
+            font-weight: bold;
+            color: #2e7d32;
+            background-color: #fafafa;
+        }
+        .operator {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+        .result-box {
+            width: 80px;
+            height: 60px;
+            border: 3px dashed #ff9800;
+            border-radius: 12px;
+            font-size: 32px;
+            font-weight: bold;
+            line-height: 55px;
+            color: #e65100;
+            background-color: #fffde7;
+        }
+
+        /* Tombol */
+        .btn-action {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #2e7d32;
+            transition: all 0.1s;
+        }
+        .btn-action:hover {
+            background-color: #43a047;
+        }
+        .btn-action:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        .btn-reset {
+            background-color: #ff9800;
+            box-shadow: 0 4px 0 #e65100;
+            margin-left: 10px;
+        }
+        .btn-reset:hover {
+            background-color: #fb8c00;
+        }
+
+        .feedback {
+            font-size: 20px;
+            font-weight: bold;
+            min-height: 30px;
+            margin-top: 15px;
+        }
+        .success { color: #2e7d32; }
+        .error { color: #c62828; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🐰 Petualangan Kelinci: Menghitung Maju 🥕</h1>
+    
+    <div class="instruction">
+        Isi angka pertama & kedua (maksimal hasil 10), lalu klik tombol <b>Lompat!</b>
+    </div>
+
+    <!-- Garis Bilangan Blok -->
+    <div class="number-line-container">
+        <div id="rabbit">🐇</div>
+        <div class="blocks-group" id="blocksGroup">
+            <!-- Blok 0 - 10 akan di-generate via JavaScript -->
+        </div>
+    </div>
+
+    <!-- Form Input Operasi Penjumlahan -->
+    <div class="math-box">
+        <input type="number" id="num1" class="input-num" min="0" max="10" placeholder="0" oninput="positionRabbitAtStart()">
+        <span class="operator">+</span>
+        <input type="number" id="num2" class="input-num" min="0" max="10" placeholder="0">
+        <span class="operator">=</span>
+        <div id="result" class="result-box">?</div>
+    </div>
+
+    <div>
+        <button class="btn-action" onclick="startJumping()">Lompat! 🚀</button>
+        <button class="btn-action btn-reset" onclick="resetGame()">Ulangi 🔄</button>
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+</div>
+
+<script>
+    const totalBlocks = 11; // 0 sampai 10
+    const rabbit = document.getElementById('rabbit');
+    const blocksGroup = document.getElementById('blocksGroup');
+    const num1Input = document.getElementById('num1');
+    const num2Input = document.getElementById('num2');
+    const resultBox = document.getElementById('result');
+    const feedbackEl = document.getElementById('feedback');
+
+    let isAnimating = false;
+
+    // Buat blok 0 hingga 10
+    function createBlocks() {
+        blocksGroup.innerHTML = '';
+        for (let i = 0; i < totalBlocks; i++) {
+            const block = document.createElement('div');
+            block.className = 'block-item';
+            block.id = `block-${i}`;
+            block.innerText = i;
+            blocksGroup.appendChild(block);
+        }
+    }
+
+    // Hitung posisi horizontal (persentase left) untuk kelinci berdasarkan angka blok
+    function getBlockLeftPosition(blockIndex) {
+        const block = document.getElementById(`block-${blockIndex}`);
+        if (!block) return 0;
+        
+        const containerRect = blocksGroup.getBoundingClientRect();
+        const blockRect = block.getBoundingClientRect();
+        
+        // Posisikan kelinci di tengah-tengah blok
+        const offsetLeft = blockRect.left - containerRect.left + (blockRect.width / 2) - 25;
+        return offsetLeft;
+    }
+
+    // Posisikan kelinci di angka pertama (num1) saat input pertama diisi
+    function positionRabbitAtStart() {
+        if (isAnimating) return;
+        
+        clearHighlights();
+        let val1 = parseInt(num1Input.value);
+        
+        if (isNaN(val1) || val1 < 0) val1 = 0;
+        if (val1 > 10) {
+            val1 = 10;
+            num1Input.value = 10;
+        }
+
+        const leftPos = getBlockLeftPosition(val1);
+        rabbit.style.left = leftPos + 'px';
+        
+        // Highlight blok awal
+        document.getElementById(`block-${val1}`).classList.add('start');
+        resultBox.innerText = '?';
+        feedbackEl.innerText = '';
+    }
+
+    function clearHighlights() {
+        for (let i = 0; i < totalBlocks; i++) {
+            const b = document.getElementById(`block-${i}`);
+            if (b) b.className = 'block-item';
+        }
+    }
+
+    // Fungsi Utama: Animasi Lompat Menghitung Maju
+    async function startJumping() {
+        if (isAnimating) return;
+
+        const val1 = parseInt(num1Input.value);
+        const val2 = parseInt(num2Input.value);
+
+        // Validasi Input
+        if (isNaN(val1) || isNaN(val2)) {
+            showFeedback("Harap isi kedua kotak angka terlebih dahulu!", "error");
+            return;
+        }
+
+        if (val1 < 0 || val2 < 0) {
+            showFeedback("Angka tidak boleh negatif!", "error");
+            return;
+        }
+
+        const sum = val1 + val2;
+        if (sum > 10) {
+            showFeedback("Jumlahnya melebihi 10! Coba angka yang lebih kecil ya.", "error");
+            return;
+        }
+
+        isAnimating = true;
+        feedbackEl.innerText = "";
+        resultBox.innerText = "?";
+        clearHighlights();
+
+        // Posisikan Awal
+        let currentPos = val1;
+        rabbit.style.left = getBlockLeftPosition(currentPos) + 'px';
+        document.getElementById(`block-${currentPos}`).classList.add('start');
+
+        await sleep(500);
+
+        // Proses Lompat Satu per Satu (Menghitung Maju)
+        for (let step = 1; step <= val2; step++) {
+            currentPos++;
+            
+            // Animasi Naik (Melompat)
+            rabbit.classList.add('jumping');
+            rabbit.style.left = getBlockLeftPosition(currentPos) + 'px';
+            
+            await sleep(250);
+            
+            // Animasi Turun (Mendarat)
+            rabbit.classList.remove('jumping');
+            
+            await sleep(250);
+        }
+
+        // Tampilkan Hasil Akhir
+        document.getElementById(`block-${currentPos}`).classList.add('target');
+        resultBox.innerText = sum;
+        showFeedback(`Hore! ${val1} + ${val2} = ${sum}. Kelinci melompat ${val2} langkah maju! 🎉`, "success");
+        
+        isAnimating = false;
+    }
+
+    function showFeedback(msg, type) {
+        feedbackEl.innerText = msg;
+        feedbackEl.className = `feedback ${type}`;
+    }
+
+    function resetGame() {
+        if (isAnimating) return;
+        num1Input.value = '';
+        num2Input.value = '';
+        resultBox.innerText = '?';
+        feedbackEl.innerText = '';
+        clearHighlights();
+        positionRabbitAtStart();
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // Inisialisasi Tampilan Awal saat Halaman Dimuat
+    window.onload = () => {
+        createBlocks();
+        setTimeout(() => {
+            positionRabbitAtStart();
+        }, 100);
+    };
+
+    // Sesuaikan posisi kelinci jika layar di-resize
+    window.onresize = () => {
+        positionRabbitAtStart();
+    };
+</script>
+
+</body>
+</html>
